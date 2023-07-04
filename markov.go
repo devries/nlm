@@ -5,8 +5,8 @@ package nlm
 // chain structure
 type MarkovBuilder map[string]map[rune]int
 
-var EndOfParagraph = '\u001d'
-var EndOfDocument = '\u0003'
+const EndOfParagraph = '\u001d'
+const EndOfDocument = '\u0003'
 
 func NewMarkovBuilder() MarkovBuilder {
 	return make(map[string]map[rune]int)
