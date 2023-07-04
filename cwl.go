@@ -4,24 +4,24 @@ import "math/rand"
 
 // CountWeightedList holds a weighted list of runes and allows
 // selection of random runes weighted by count.
-type CountWeightedList struct {
-	letters           []rune
+type CountWeightedList[T comparable] struct {
+	items             []T
 	cumulativeWeights []int
 	total             int
 }
 
 // NewCountWeightedList returns a pointer to a CountWeightedList structure
 // from which you can select random elements weighted by count.
-func NewCountWeightedList(counts map[rune]int) *CountWeightedList {
+func NewCountWeightedList[T comparable](counts map[T]int) *CountWeightedList[T] {
 	n := len(counts)
 
-	cwl := CountWeightedList{make([]rune, n), make([]int, n), 0}
+	cwl := CountWeightedList[T]{make([]T, n), make([]int, n), 0}
 
 	sum := 0
 	i := 0
 	for k, v := range counts {
 		sum += v
-		cwl.letters[i] = k
+		cwl.items[i] = k
 		cwl.cumulativeWeights[i] = sum
 		i++
 	}
@@ -31,14 +31,15 @@ func NewCountWeightedList(counts map[rune]int) *CountWeightedList {
 }
 
 // GetRandomItem returns a random rune from the weighted list.
-func (cwl *CountWeightedList) GetRandomItem() rune {
+func (cwl *CountWeightedList[T]) GetRandomItem() T {
 	if cwl.total == 0 {
-		return 0
+		var ret T
+		return ret
 	}
 	i := rand.Int() % cwl.total
 	idx := binarySearch(cwl.cumulativeWeights, i)
 
-	return cwl.letters[idx]
+	return cwl.items[idx]
 }
 
 func binarySearch(a []int, n int) int {

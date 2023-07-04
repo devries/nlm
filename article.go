@@ -10,7 +10,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-//go:embed articles/*
+//go:embed articles/*.txt
 var articleFiles embed.FS
 
 type Article struct {
