@@ -1,0 +1,7 @@
+<h1>{{ .Title }}</h1>
+{{ if .Subtitle -}}
+<h2>{{ .Subtitle }}</h2>
+{{ end -}}
+{{- range .Paragraphs}}
+<p>{{ . }}</p>
+{{- end }}
