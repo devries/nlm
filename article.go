@@ -93,3 +93,58 @@ func GetNamedArticle(name string) (*Article, error) {
 
 	return article, nil
 }
+
+type ArticleBuilder struct {
+	TitleMarkov     MarkovSource `json:"title_markov"`
+	ContentMarkov   MarkovSource `json:"content_markov"`
+	TitleStarters   []string     `json:"title_starters"`
+	ContentStarters []string     `json:"content_starters"`
+}
+
+// NewArticleBuilder creates a Markov article builder with a chain
+// size of size.
+func NewArticleBuilder(size int) (*ArticleBuilder, error) {
+	articles, err := GetArticleList()
+	if err != nil {
+		return nil, fmt.Errorf("unable to get article list: %s", err)
+	}
+
+	titlemb := NewMarkovBuilder()
+	contentmb := NewMarkovBuilder()
+	titleStarters := []string{}
+	contentStarters := []string{}
+
+	for _, articleName := range articles {
+		article, err := GetNamedArticle(articleName)
+		if err != nil {
+			return nil, fmt.Errorf("unable to retrieve article %s: %s", articleName, err)
+		}
+
+		titleStarters = append(titleStarters, getPrefix(article.Title, size))
+		titlemb.AddText(article.Title, size, EndOfDocument)
+
+		for i, para := range article.Paragraphs {
+			var endRune rune
+			if i >= len(article.Paragraphs)-1 {
+				endRune = EndOfDocument
+			} else {
+				endRune = EndOfParagraph
+			}
+
+			contentStarters = append(contentStarters, getPrefix(para, size))
+			contentmb.AddText(para, size, endRune)
+		}
+	}
+
+	ret := ArticleBuilder{titlemb.ConvertToSource(), contentmb.ConvertToSource(), titleStarters, contentStarters}
+	return &ret, nil
+}
+
+func getPrefix(s string, size int) string {
+	r := []rune(s)
+	return string(r[:size])
+}
+
+func (ab *ArticleBuilder) GenerateArticle(titleSize, articleSize int) (*Article, error) {
+	return nil, nil
+}

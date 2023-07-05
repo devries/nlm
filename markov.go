@@ -1,5 +1,7 @@
 package nlm
 
+import "strings"
+
 // MarkovBuilder is a map of strings pointing to counts of letters
 // that follow each string. This is used while building a Markov
 // chain structure
@@ -63,4 +65,22 @@ func (s MarkovSource) GetNextCharacter(v []rune) rune {
 	cwl := s[string(v)]
 
 	return cwl.GetRandomItem()
+}
+
+func (s MarkovSource) GenerateText(start string, maxLength int) []string {
+	search := []rune(start)
+
+	for i := 0; i < maxLength; i++ {
+		c := s.GetNextCharacter(search[i:])
+
+		if c == EndOfDocument {
+			break
+		}
+		search = append(search, c)
+	}
+
+	subsections := strings.FieldsFunc(string(search), func(c rune) bool {
+		return c == EndOfParagraph
+	})
+	return subsections
 }
