@@ -145,6 +145,14 @@ func getPrefix(s string, size int) string {
 	return string(r[:size])
 }
 
-func (ab *ArticleBuilder) GenerateArticle(titleSize, articleSize int) (*Article, error) {
-	return nil, nil
+func (ab *ArticleBuilder) GenerateArticle(titleSize, articleSize int) *Article {
+	titleStart := ab.TitleStarters[rand.Int()%len(ab.TitleStarters)]
+	title := ab.TitleMarkov.GenerateText(titleStart, titleSize)[0]
+
+	contentStart := ab.ContentStarters[rand.Int()%len(ab.ContentStarters)]
+	content := ab.ContentMarkov.GenerateText(contentStart, articleSize)
+
+	ret := Article{title, "", content}
+
+	return &ret
 }

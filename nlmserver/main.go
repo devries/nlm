@@ -14,6 +14,8 @@ import (
 //go:embed templates/*.html
 var templateFiles embed.FS
 
+const size = 5
+
 type Name struct {
 	FirstName string
 	LastName  string
@@ -24,6 +26,11 @@ func main() {
 	mux := http.NewServeMux()
 
 	templates := template.Must(template.New("web").ParseFS(templateFiles, "templates/*"))
+
+	articleBuilder, err := nlm.NewArticleBuilder(size)
+	if err != nil {
+		log.Fatalf("Error creating article builder: %s", err)
+	}
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
@@ -62,6 +69,19 @@ func main() {
 			log.Print(err)
 			errorTemplate.Execute(w, "Unable to render article")
 			return
+		}
+	})
+
+	mux.HandleFunc("/generate", func(w http.ResponseWriter, r *http.Request) {
+		responseTemplate := templates.Lookup("article.html")
+		errorTemplate := templates.Lookup("error.html")
+
+		article := articleBuilder.GenerateArticle(120, 5000)
+
+		err = responseTemplate.Execute(w, article)
+		if err != nil {
+			log.Printf("error writing article template: %s", err)
+			errorTemplate.Execute(w, "Unable to render article")
 		}
 	})
 
