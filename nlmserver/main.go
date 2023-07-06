@@ -44,35 +44,7 @@ func main() {
 		}
 	})
 
-	mux.HandleFunc("/getarticle", func(w http.ResponseWriter, r *http.Request) {
-		responseTemplate := templates.Lookup("article.html")
-		errorTemplate := templates.Lookup("error.html")
-
-		// data := nlm.GetArticle()
-		articleNames, err := nlm.GetArticleList()
-		if err != nil {
-			log.Print(err)
-			errorTemplate.Execute(w, "Unable to render article")
-			return
-		}
-
-		selectedName := articleNames[rand.Int()%len(articleNames)]
-		data, err := nlm.GetNamedArticle(selectedName)
-		if err != nil {
-			log.Print(err)
-			errorTemplate.Execute(w, "Unable to render article")
-			return
-		}
-
-		err = responseTemplate.Execute(w, data)
-		if err != nil {
-			log.Print(err)
-			errorTemplate.Execute(w, "Unable to render article")
-			return
-		}
-	})
-
-	mux.HandleFunc("/generate", func(w http.ResponseWriter, r *http.Request) {
+	mux.Handle("/generate", NewRateLimiter("X-Forwarded-For", 1, 2, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		responseTemplate := templates.Lookup("article.html")
 		errorTemplate := templates.Lookup("error.html")
 
@@ -83,10 +55,15 @@ func main() {
 			log.Printf("error writing article template: %s", err)
 			errorTemplate.Execute(w, "Unable to render article")
 		}
-	})
+	})))
 
-	mux.HandleFunc("/debug", func(w http.ResponseWriter, r *http.Request) {
-		http.Error(w, http.StatusText(http.StatusTeapot), http.StatusTeapot)
+	mux.HandleFunc("/speed", func(w http.ResponseWriter, r *http.Request) {
+		errorTemplate := templates.Lookup("error.html")
+		w.Header().Add("HX-Retarget", "#content")
+		w.Header().Add("HX-Reswap", "innerHTML")
+		w.Header().Add("HX-Replace-Url", "/")
+
+		errorTemplate.Execute(w, "Too many requests, please slow down.")
 	})
 
 	server := &http.Server{
