@@ -44,7 +44,7 @@ func main() {
 		}
 	})
 
-	mux.Handle("/generate", NewRateLimiter("X-Forwarded-For", 1, 2, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux.Handle("/generate", NewRateLimiter("X-Forwarded-For", 0.2, 4, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		responseTemplate := templates.Lookup("article.html")
 		errorTemplate := templates.Lookup("error.html")
 
