@@ -14,6 +14,9 @@ import (
 //go:embed templates/*.html
 var templateFiles embed.FS
 
+//go:embed static
+var staticFiles embed.FS
+
 const size = 5
 
 type Name struct {
@@ -65,6 +68,8 @@ func main() {
 
 		errorTemplate.Execute(w, "Too many requests, please slow down.")
 	})
+
+	mux.Handle("/static/", http.FileServer(http.FS(staticFiles)))
 
 	server := &http.Server{
 		Addr:    ":8080",
