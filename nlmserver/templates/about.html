@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>No Language Model</title>
+  <link rel="icon" href="static/favicon.png" />
+  <link href="static/main.css" rel="stylesheet" />
+</head>
+
+<body class="fullpage">
+  <header class="header">
+    <h1 class="sitetitle"><a href="/">The Washed Up Post</a></h1>
+  </header>
+  <div class="main">
+    <h1>About</h1>
+    <p>This is a small project written by <a href="https://social.unnecessary.tech/u/nissyen">Christopher
+        De&nbsp;Vries</a> to explore the current craze over Large Language Models like
+      ChatGTP. ChatGPT is not magic, and it is not a general intelligence. The results it
+      produces may seem extraordinary, but as we have <a
+        href="https://www.reuters.com/legal/transactional/lawyer-used-chatgpt-cite-bogus-cases-what-are-ethics-2023-05-30/">recently
+        seen</a>
+      the remarkable results that we get from ChatGPT have no guarantee of being accurate. This
+      reminded me of some work I had done with a very simple predictive algorithm back
+      in the 90s.</p>
+    <p>In contrast with Large Language Models like ChatGPT, this is a No Language Model.
+      It is based on a <a href="https://en.wikipedia.org/wiki/Markov_chain">Markov chain</a>
+      which is a process developed in 1906 by which we predict
+      the next item in a list using the previous N items and a probability model
+      based on existing sequences. In this case the existing sequence is just a sequence of letters
+      from news articles about ChatGPT, and we predict the next letter
+      based on the previous 5 letters.</p>
+    <p>Markov chains can produce articles which look surprisingly similar to English
+      text, but they contain no vocabulary database, know nothing of grammar, and have no
+      understanding of the topic about which they write. A Markov chain is just a simple
+      algorithm. LLMs may be more complex, but they fundamentally have similar limitations.
+      To say that they “hallucinate” or “dream” is plainly false. They are inherently
+      uncreative and unreliable, generating random babbel using a large volume of
+      human-produced text.</p>
+    <p>You can see how this site works by <a href="https://github.com/devries/nlm">exploring
+        the code on github</a>.</p>
+  </div>
+</body>
+
+</html>

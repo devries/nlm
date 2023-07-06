@@ -30,10 +30,14 @@ func main() {
 
 	templates := template.Must(template.New("web").ParseFS(templateFiles, "templates/*"))
 
+	log.Printf("Loading articles...")
+	start := time.Now()
 	articleBuilder, err := nlm.NewArticleBuilder(size)
 	if err != nil {
 		log.Fatalf("Error creating article builder: %s", err)
 	}
+	elapsed := time.Now().Sub(start)
+	log.Printf("Time elapsed loading articles: %s", elapsed)
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
@@ -42,6 +46,14 @@ func main() {
 		}
 		indexTemplate := templates.Lookup("index.html")
 		err := indexTemplate.Execute(w, nil)
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+	})
+
+	mux.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
+		aboutTemplate := templates.Lookup("about.html")
+		err := aboutTemplate.Execute(w, nil)
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}
