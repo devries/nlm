@@ -64,7 +64,7 @@ func main() {
 
 	mux.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
 		aboutTemplate := templates.Lookup("about.html")
-		err := aboutTemplate.Execute(w, nil)
+		err := aboutTemplate.Execute(w, size)
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}
