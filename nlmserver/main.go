@@ -6,6 +6,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/devries/nlm"
@@ -27,6 +28,16 @@ type Name struct {
 func main() {
 	rand.Seed(time.Now().UnixNano())
 	mux := http.NewServeMux()
+
+	var bind string
+	switch len(os.Args) {
+	case 1:
+		bind = ":8080"
+	case 2:
+		bind = os.Args[1]
+	default:
+		log.Fatalf("Usage: %s [bind]", os.Args[0])
+	}
 
 	templates := template.Must(template.New("web").ParseFS(templateFiles, "templates/*"))
 
@@ -84,10 +95,10 @@ func main() {
 	mux.Handle("/static/", http.FileServer(http.FS(staticFiles)))
 
 	server := &http.Server{
-		Addr:    ":8080",
+		Addr:    bind,
 		Handler: loggingHandler(mux),
 	}
 
-	log.Print("Server starting on port 8080")
+	log.Printf("Server starting on %s", bind)
 	log.Fatal(server.ListenAndServe())
 }
