@@ -20,11 +20,6 @@ var staticFiles embed.FS
 
 const size = 6
 
-type Name struct {
-	FirstName string
-	LastName  string
-}
-
 func main() {
 	rand.Seed(time.Now().UnixNano())
 	mux := http.NewServeMux()
