@@ -18,7 +18,7 @@ var templateFiles embed.FS
 //go:embed static
 var staticFiles embed.FS
 
-const size = 5
+const size = 6
 
 type Name struct {
 	FirstName string
