@@ -18,6 +18,7 @@ var templateFiles embed.FS
 //go:embed static
 var staticFiles embed.FS
 
+const titlesize = 5
 const size = 6
 
 func main() {
@@ -38,7 +39,7 @@ func main() {
 
 	log.Printf("Loading articles...")
 	start := time.Now()
-	articleBuilder, err := nlm.NewArticleBuilder(size)
+	articleBuilder, err := nlm.NewArticleBuilder(titlesize, size)
 	if err != nil {
 		log.Fatalf("Error creating article builder: %s", err)
 	}

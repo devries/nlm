@@ -81,8 +81,8 @@ type ArticleBuilder struct {
 }
 
 // NewArticleBuilder creates a Markov article builder with a chain
-// size of size.
-func NewArticleBuilder(size int) (*ArticleBuilder, error) {
+// size of titlesize for titles and size for content.
+func NewArticleBuilder(titlesize, size int) (*ArticleBuilder, error) {
 	articles, err := GetArticleList()
 	if err != nil {
 		return nil, fmt.Errorf("unable to get article list: %s", err)
@@ -99,8 +99,8 @@ func NewArticleBuilder(size int) (*ArticleBuilder, error) {
 			return nil, fmt.Errorf("unable to retrieve article %s: %s", articleName, err)
 		}
 
-		titleStarters = append(titleStarters, getPrefix(article.Title, size))
-		titlemb.AddText(article.Title, size, EndOfDocument)
+		titleStarters = append(titleStarters, getPrefix(article.Title, titlesize))
+		titlemb.AddText(article.Title, titlesize, EndOfDocument)
 
 		for i, para := range article.Paragraphs {
 			var endRune rune
