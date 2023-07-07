@@ -69,7 +69,7 @@ func main() {
 		responseTemplate := templates.Lookup("article.html")
 		errorTemplate := templates.Lookup("error.html")
 
-		article := articleBuilder.GenerateArticle(120, 5000)
+		article := articleBuilder.GenerateArticle(120, 15000)
 
 		err = responseTemplate.Execute(w, article)
 		if err != nil {
