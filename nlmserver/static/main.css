@@ -99,6 +99,8 @@ button {
   background-color: #efefef;
 }
 
-button:hover {
-  background-color: #50da70;
+@media (hover: hover) {
+  button:hover {
+    background-color: #50da70;
+  }
 }
