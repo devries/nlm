@@ -4,7 +4,7 @@ TEMPLATES := $(wildcard nlmserver/templates/*.html)
 ARTICLES := $(wildcard articles/*.txt)
 STATIC := $(wildcard nlmserver/static/*)
 ALLSOURCE := $(SOURCE) $(TEMPLATES) $(ARTICLES) $(STATIC)
-.PHONY: clean build
+.PHONY: clean build test
 .DEFAULT: build
 
 build/darwin/$(BINARY): $(ALLSOURCE)
@@ -35,3 +35,6 @@ build: build/darwinuniversal/$(BINARY) build/linux/$(BINARY) build/linuxarmhf/$(
 
 clean:
 	rm -rf build || true
+
+test:
+	go test -cover .

@@ -95,4 +95,10 @@ button {
   margin: 8px 0;
   box-sizing: border-box;
   -webkit-appearance: none;
+  color: black;
+  background-color: #efefef;
+}
+
+button:hover {
+  background-color: #50da70;
 }
