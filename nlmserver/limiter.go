@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"sync"
 	"time"
 
@@ -81,6 +82,7 @@ func (rl *RateLimiter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if limiter.Allow() == false {
 		log.Printf("Too many requests for key: %s", limiterKey)
 		w.Header().Add("HX-Location", "/speed")
+		w.Header().Set("Retry-After", strconv.FormatFloat(1.0/float64(rl.rate), 'f', 0, 64))
 		http.Error(w, http.StatusText(http.StatusTooManyRequests), http.StatusTooManyRequests)
 		return
 	}
